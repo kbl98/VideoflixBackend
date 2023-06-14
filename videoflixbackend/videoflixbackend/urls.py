@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from videostreamApp.views import UserRegistrationView
+from videostreamApp.views import UserRegistrationView,loginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', UserRegistrationView.as_view()),
+    path('login/', loginView.as_view()),
 ]

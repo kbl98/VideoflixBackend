@@ -20,20 +20,40 @@ class UserRegistrationView(APIView):
     """
     def post(self, request):
         data=request.data
-        email=data['email']
-        username=data['email']
-    
-        if not self.username_exists(username,email):
-            user=User.objects.create_user(username=data['email'],email=data['email'],password=data['password'])
+        username=data.get('email')
+       
+        if not username:
+            raise ValueError("Der angegebene Benutzername muss festgelegt sein")
+        if not self.username_exists(username):
+            user=User.objects.create_user(username=data.get('email'),email=data.get('email'),password=data.get('password'))
             user.is_staff = True
             user.save()
             return JsonResponse({'Message':'User created'})
            
         return JsonResponse({'Message':'User already exists'})
 
-    def username_exists(self,username,email):
+    def username_exists(self,username):
         if User.objects.filter(username=username).exists():
             return True
-        if User.objects.filter(email=email).exists():
-            return True
-        return False   
+        return False 
+
+
+class loginView(ObtainAuthToken):
+    """
+    View for login of registrated User. Returns token.
+    """
+    def post(self, request, *args, **kwargs):
+        data=request.data
+        print(data.get('password'))
+        user = authenticate(username=data.get('email'), password=data.get('password'))
+        if user is not None:
+            user = User.objects.get(email=request.data['email'])
+            token, created = Token.objects.get_or_create(user=user)
+            print(token)
+            return Response({
+                'token': token.key,
+                'email': user.email,
+                'id':user.id,
+            })
+        else:
+            return Response({'message':'Not User'})  
