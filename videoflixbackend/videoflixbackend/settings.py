@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import ssl
+import certifi
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +44,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'videostreamApp',
     'rest_framework.authtoken',
+    'authemail',
+    'secretballot',
 ]
+
+AUTH_USER_MODEL = 'videostreamApp.MyUser'
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,3 +147,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication', 
     ],
 }
+
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587  # Der SMTP-Port
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL =False
+EMAIL_HOST = 'securesmtp.t-online.de.'
+DEFAULT_FROM_EMAIL = 'dr.katja.becker-lindhorst@t-online.de'  # Ihre Standard-"Von"-E-Mail-Adresse
+
+
