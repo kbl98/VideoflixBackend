@@ -156,7 +156,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_PORT = 587  # Der SMTP-Port
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL =False
-EMAIL_HOST = 'securesmtp.t-online.de.'
-DEFAULT_FROM_EMAIL = 'dr.katja.becker-lindhorst@t-online.de'  # Ihre Standard-"Von"-E-Mail-Adresse
-
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL = 'devakad8@gmail.com'  # Ihre Standard-"Von"-E-Mail-Adresse
+EMAIL_HOST_USER = 'devakad8@gmail.com'
+EMAIL_HOST_PASSWORD = 'hfzrquihywjwuzel'
 

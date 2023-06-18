@@ -24,4 +24,5 @@ urlpatterns = [
     path('login/', loginView.as_view()),
     path('api/videostreamApp/', include('authemail.urls')),
     path('verify/', EmailVerificationView.as_view(), name='email_verification'),
+    ##path('verify/<str:code>/', EmailVerificationView.as_view(), name='email_verification_with_code'),
 ]

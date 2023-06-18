@@ -16,6 +16,7 @@ import random
 from django.urls  import reverse
 import smtplib
 import ssl
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -61,7 +62,7 @@ class UserRegistrationView(APIView):
     def send_verification_email(self, user,verification_url):
         subject = 'Account Verification'
         message = f'Dear {user.email},\n\nPlease click the link below to verify your email address:\n\n{verification_url}'
-        from_email = 'dr.katja.becker-lindhorst@t-online.de'
+        from_email = 'devakad8@gmail.com'
         to_email = user.email
        
         send_mail(subject, message, from_email, [to_email])
@@ -73,21 +74,21 @@ class EmailVerificationView(APIView):
     Function to verify the email address using the verification code
     """
     
-    def post(self, request):
-        verification_code = request.data.get('verification_code')
-        
-        try:
+    def get(self, request):
+        verification_code = request.GET.get('code')
+        if verification_code:
+            try:
             # Find the user with the given verification code
-            user = MyUser.objects.get(verification_code=verification_code)
-        except MyUser.DoesNotExist:
-            return JsonResponse({'Message': 'Invalid verification code'}, status=400)
+                user = MyUser.objects.get(verification_code=verification_code)
+            except MyUser.DoesNotExist:
+                return JsonResponse({'Message': 'Invalid verification code'}, status=400)
         
         # Verify the user and update the verification status
-        user.is_verified = True
-        user.save()
+            user.is_verified = True
+            user.save()
         
-        return JsonResponse({'Message': 'Email successfully verified'})
-
+            return JsonResponse({'Message': 'Email successfully verified'})
+        return JsonResponse({'Message': 'Code Missing'})
 
 class loginView(ObtainAuthToken):
     """
@@ -96,15 +97,16 @@ class loginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         data=request.data
         print(data.get('password'))
+        
         user = authenticate(email=data.get('email'), password=data.get('password'))
         if user is not None:
-            user = User.objects.get(email=request.data['email'])
-            token, created = Token.objects.get_or_create(user=user)
-            print(token)
-            return Response({
-                'token': token.key,
-                'email': user.email,
-                'id':user.id,
+            user = MyUser.objects.get(email=request.data['email'])
+            if user.is_verified==True:
+                token, created = Token.objects.get_or_create(user=user)
+                print(token)
+                return Response({'token': token.key,'email': user.email,'id':user.id,
             })
+            else:
+                return HttpResponse(status=401)
         else:
             return Response({'message':'Not User'})  
