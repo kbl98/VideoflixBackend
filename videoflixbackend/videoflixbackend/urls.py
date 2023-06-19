@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path,include
 from videostreamApp.views import UserRegistrationView,loginView
 from videostreamApp.views import EmailVerificationView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +29,4 @@ urlpatterns = [
     path('api/videostreamApp/', include('authemail.urls')),
     path('verify/', EmailVerificationView.as_view(), name='email_verification'),
     ##path('verify/<str:code>/', EmailVerificationView.as_view(), name='email_verification_with_code'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

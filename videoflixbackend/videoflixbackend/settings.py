@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'videostreamApp',
+    'videostreamApp.apps.VideostreamAppConfig',
     'rest_framework.authtoken',
     'authemail',
     'secretballot',
@@ -148,6 +148,10 @@ REST_FRAMEWORK = {
     ],
 }
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+
 
 
 
@@ -157,7 +161,7 @@ EMAIL_PORT = 587  # Der SMTP-Port
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL =False
 EMAIL_HOST = 'smtp.gmail.com'
-DEFAULT_FROM_EMAIL = 'devakad8@gmail.com'  # Ihre Standard-"Von"-E-Mail-Adresse
+DEFAULT_FROM_EMAIL = 'devakad8@gmail.com'  
 EMAIL_HOST_USER = 'devakad8@gmail.com'
 EMAIL_HOST_PASSWORD = 'hfzrquihywjwuzel'
 
