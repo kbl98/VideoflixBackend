@@ -41,18 +41,22 @@ class RegistrationTest(TestCase):
         self.assertEqual(response.status_code,200)
 
 class LoginTest(TestCase):
+    
+
     def test_loginVerified(self):
         self.client=Client()
         data={"email":'test_user@test.de',"password":'test_user'}
-        self.user=MyUser.objects.create(email='test_user@test.de',password='test_user',is_verified=True)
+        self.user=MyUser.objects.create_user(email='test_user@test.de',password='test_user')
+        self.user.is_verified=True
+        self.user.save()
         response=self.client.post('/login/',data)
         self.assertEqual(response.status_code, 200)
 
 class LoginUnverfiedTest(TestCase):
     def test_loginUnverified(self):
         self.client=Client()
-        data={"email":'test_user@test.de',"password":'test_user'}
-        self.user=MyUser.objects.create(email='test_user@test.de',password='test_user',is_verified=False)
+        data={"email":'test_user2@test.de',"password":'test_user'}
+        self.user=MyUser.objects.create_user(email='test_user2@test.de',password='test_user')
         response=self.client.post('/login/',data, follow=False)
         self.assertEqual(response.status_code, 401)
 
