@@ -16,6 +16,8 @@ import ssl
 import certifi
 
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,6 +30,18 @@ SECRET_KEY = 'django-insecure-_-!0e)=b7nfmzh@+0dqo-c*5e#l0t6l8tv4%1&pt+59f8^gpc_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+}
+
+def show_toolbar(request):
+    return True
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+}
+
+
 
 ALLOWED_HOSTS = []
 
@@ -42,10 +56,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'rest_framework',
     'videostreamApp.apps.VideostreamAppConfig',
     'rest_framework.authtoken',
     'authemail',
     'secretballot',
+    'debug_toolbar',
 ]
 
 AUTH_USER_MODEL = 'videostreamApp.MyUser'
@@ -53,7 +69,11 @@ AUTH_USER_MODEL = 'videostreamApp.MyUser'
 
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    ##'django.middleware.cache.UpdateCacheMiddleware',
+    ##'django.middleware.common.CommonMiddleware',
+    ##'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,6 +81,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'videoflixbackend.urls'
@@ -68,7 +89,7 @@ ROOT_URLCONF = 'videoflixbackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -165,3 +186,22 @@ DEFAULT_FROM_EMAIL = 'devakad8@gmail.com'
 EMAIL_HOST_USER = 'devakad8@gmail.com'
 EMAIL_HOST_PASSWORD = 'hfzrquihywjwuzel'
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'PASSWORD': 'foobared',
+        },
+        "KEY_PREFIX": "videoflix"
+    }
+}
+
+CACHETTL = 60 * 15
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

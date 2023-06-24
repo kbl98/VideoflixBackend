@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from videostreamApp.views import UserRegistrationView,loginView
-from videostreamApp.views import EmailVerificationView
+from videostreamApp.views import EmailVerificationView,VideoView
+from videostreamApp.views import VideoTemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,7 +27,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', UserRegistrationView.as_view()),
     path('login/', loginView.as_view()),
+    path('videotemplate/', VideoTemplateView.as_view()),
+    path('videos/', VideoView.as_view()),
     path('api/videostreamApp/', include('authemail.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
     path('verify/', EmailVerificationView.as_view(), name='email_verification'),
     ##path('verify/<str:code>/', EmailVerificationView.as_view(), name='email_verification_with_code'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

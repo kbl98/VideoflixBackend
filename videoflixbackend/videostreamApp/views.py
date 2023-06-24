@@ -11,12 +11,19 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
-from .models import MyUser
+from .models import MyUser,Video
 import random
 from django.urls  import reverse
 import smtplib
 import ssl
 from django.http import HttpResponse
+from .serializers import VideoSerializer
+from rest_framework import viewsets
+from django.views.decorators.cache import cache_page
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.conf import settings
+from django.shortcuts import render
+from django.views.generic.base import TemplateView
 
 
 # Create your views here.
@@ -110,3 +117,38 @@ class loginView(ObtainAuthToken):
                 return HttpResponse(status=401)
         else:
             return Response({'message':'Not User'})  
+        
+class VideoView(APIView):
+     CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
+     
+     @cache_page(CACHETTL)
+     def get(self,request, *args, **kwargs):
+        videos=Video.objects.all()
+        serializedVideos=VideoSerializer(videos,many=True)
+        return render(request, 'videos.html', {'videos': videos})
+        
+     @cache_page(CACHETTL)
+     def get(self,request):
+        videos=Video.objects.all()
+        serializedVideos=VideoSerializer(videos,many=True)
+        
+        return JsonResponse(serializedVideos.data, safe=False)
+        
+     def method(self, request, *args, **kwargs):
+        # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
+        # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
+        pass
+     
+
+class VideoTemplateView(TemplateView):
+     CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
+     
+     @cache_page(CACHETTL)
+     def get(self,request, *args, **kwargs):
+        videos=Video.objects.all()
+        return render(request, 'videos.html', {'videos': videos})
+     
+     def method(self, request, *args, **kwargs):
+        # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
+        # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
+        pass

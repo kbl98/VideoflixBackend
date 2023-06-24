@@ -3,6 +3,7 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from .models import Video
 import os
+from .tasks import convert_480
 
 def _delete_file(path):
    """ Deletes file from filesystem. """
@@ -14,6 +15,7 @@ def send_post_save(sender,instance,created,**kwargs):
     print('Video save')
     if created:
         print('New Video saved')
+        convert_480(instance.file.path)
 
 @receiver(post_delete,sender=Video)
 def send_post_delete(sender,instance,**kwargs):
