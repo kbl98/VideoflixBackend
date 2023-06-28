@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     'authemail',
     'secretballot',
     'debug_toolbar',
+    "django_rq",
+    'import_export',
 ]
 
 AUTH_USER_MODEL = 'videostreamApp.MyUser'
@@ -154,7 +156,7 @@ STATIC_URL = 'static/'
 
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -173,6 +175,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
+BACKUP_ROOT=os.path.join(BASE_DIR, 'backup')
+
+BACKUP_URL='/backup/'
+
 
 
 
@@ -189,13 +195,23 @@ EMAIL_HOST_PASSWORD = 'hfzrquihywjwuzel'
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://:foobared@127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            'PASSWORD': 'foobared',
+            'PASSWORD':'foobared',
         },
         "KEY_PREFIX": "videoflix"
     }
+}
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD':'foobared',
+    },
+    
 }
 
 CACHETTL = 60 * 15

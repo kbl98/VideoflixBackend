@@ -24,6 +24,10 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.conf import settings
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse
+from videostreamApp.admin import VideoResource
+from datetime import datetime
+from videostreamApp.models import export_videos
 
 
 # Create your views here.
@@ -152,3 +156,21 @@ class VideoTemplateView(TemplateView):
         # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
         # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
         pass
+     
+
+
+     
+def export_videos_view(request):
+    export_videos()  
+
+    return HttpResponse("Videos exported successfully")
+
+
+
+#def export_video_json(request):
+  #  timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+   # video_resource = VideoResource()
+    #data = video_resource.export()
+    #response = HttpResponse(data.json, content_type='json')
+    #response['Content-Disposition'] = 'attachment; filename="backup"+{timestamp}+"books.json"'
+    #return response
