@@ -27,7 +27,7 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponse
 from videostreamApp.admin import VideoResource
 from datetime import datetime
-from videostreamApp.models import export_videos
+from videostreamApp.models import export_videos,import_videos
 
 
 # Create your views here.
@@ -123,13 +123,19 @@ class loginView(ObtainAuthToken):
             return Response({'message':'Not User'})  
         
 class VideoView(APIView):
+      
+     #authentication_classes = [authentication.TokenAuthentication] 
+
      CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
+     """
+     View for get and post Videos. Only logged Users, Token required.
+     """
      
-     @cache_page(CACHETTL)
-     def get(self,request, *args, **kwargs):
-        videos=Video.objects.all()
-        serializedVideos=VideoSerializer(videos,many=True)
-        return render(request, 'videos.html', {'videos': videos})
+    # @cache_page(CACHETTL)
+    # def get(self,request, *args, **kwargs):
+       # videos=Video.objects.all()
+       #serializedVideos=VideoSerializer(videos,many=True)
+        #return render(request, 'videos.html', {'videos': videos})
         
      @cache_page(CACHETTL)
      def get(self,request):
@@ -137,7 +143,17 @@ class VideoView(APIView):
         serializedVideos=VideoSerializer(videos,many=True)
         
         return JsonResponse(serializedVideos.data, safe=False)
-        
+     
+     def post(self,request):
+         data=request.data
+         video=Video.objects.create(title=data['title'],description=data['description'],file=data['file'])
+         video.save()
+         serializedVideo=VideoSerializer(video)
+
+         return JsonResponse(serializedVideo.data, safe=False)
+
+
+
      def method(self, request, *args, **kwargs):
         # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
         # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
@@ -147,10 +163,14 @@ class VideoView(APIView):
 class VideoTemplateView(TemplateView):
      CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
      
+     """
+     View for getting Videos as Djangotemplate. 
+     """
      @cache_page(CACHETTL)
      def get(self,request, *args, **kwargs):
         videos=Video.objects.all()
         return render(request, 'videos.html', {'videos': videos})
+     
      
      def method(self, request, *args, **kwargs):
         # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
@@ -158,12 +178,38 @@ class VideoTemplateView(TemplateView):
         pass
      
 
+class VideoDetailView(APIView):
+
+    authentication_classes = [authentication.TokenAuthentication]
+    """
+    View for getting selected Video or delete it. Token required. 
+    """
+
+    def get(self, request, pk):
+        selectedVideo = Video.objects.get(pk=pk)
+        serializer = VideoSerializer(selectedVideo)
+        return Response(serializer.data)
+
+    def delete(self, request, pk, format=None):
+        print('deletestart')
+        try:
+            selectedVideo = Video.objects.filter(pk=pk)
+            selectedVideo.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except selectedVideo.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
      
 def export_videos_view(request):
     export_videos()  
 
     return HttpResponse("Videos exported successfully")
+
+
+class import_videos_view(APIView):
+    def put(self,request):
+        backup=request.data
+        import_videos(backup)
 
 
 
