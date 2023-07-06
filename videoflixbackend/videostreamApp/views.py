@@ -124,7 +124,7 @@ class loginView(ObtainAuthToken):
         
 class VideoView(APIView):
       
-     #authentication_classes = [authentication.TokenAuthentication] 
+     authentication_classes = [authentication.TokenAuthentication] 
 
      CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
      """
