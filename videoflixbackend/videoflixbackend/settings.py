@@ -115,7 +115,7 @@ DATABASES = {
         'NAME': 'kbl',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': 'localhost',
+        'HOST': ' kbl98.pythonanywhere.com',
         'PORT': '',
     }
 }
