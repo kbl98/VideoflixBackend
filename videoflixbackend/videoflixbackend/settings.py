@@ -42,7 +42,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kbl98.pythonanywhere.com','localhost']
 
 
 # Application definition
