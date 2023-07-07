@@ -114,7 +114,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'kbl',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': 'postgres?!',
         'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
         'PORT': '13325',
     }
