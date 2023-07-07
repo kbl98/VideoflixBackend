@@ -42,7 +42,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 
-ALLOWED_HOSTS = ['kbl98.pythonanywhere.com','localhost']
+ALLOWED_HOSTS = ['kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
 
 
 # Application definition
@@ -115,8 +115,8 @@ DATABASES = {
         'NAME': 'kbl',
         'USER': 'postgres',
         'PASSWORD': '',
-        'HOST': ' kbl98.pythonanywhere.com',
-        'PORT': '',
+        'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
+        'PORT': '13325',
     }
 }
 
