@@ -113,7 +113,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'kbl98',
-        'USER': 'kbl98.pythonanywhere.com',
+        'USER': 'kbl98',
         'PASSWORD': 'postgres?!',
         'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
         'PORT': '13325',
