@@ -42,7 +42,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 
-ALLOWED_HOSTS = ['kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
+ALLOWED_HOSTS = ['127.0.0.1','kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
 
 
 # Application definition
@@ -109,14 +109,25 @@ WSGI_APPLICATION = 'videoflixbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql',
+   #     'NAME': 'postgres',
+    #    'USER': 'super',
+     #   'PASSWORD': 'postgres?!',
+      #  'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
+       # 'PORT': '13325',
+    #}
+#}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'super',
-        'PASSWORD': 'postgres?!',
-        'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
-        'PORT': '13325',
+        'NAME': 'kbl',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 

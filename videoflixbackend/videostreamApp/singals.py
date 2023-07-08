@@ -22,8 +22,10 @@ def send_post_save(sender,instance,created,**kwargs):
     print('Video save')
     if created:
         print('New Video saved')
-        #queue = django_rq.get_queue('default',autocommit=True)
-       # queue.enqueue(convert_480,instance.file.path)
+        queue = django_rq.get_queue('default',autocommit=True)
+        queue.enqueue(convert_480,instance.file.path)
+        queue.enqueue(convert_720,instance.file.path)
+        queue.enqueue(convert_1000,instance.file.path)
         convert_480(instance.file.path)
         convert_720(instance.file.path)
         convert_1000(instance.file.path)
