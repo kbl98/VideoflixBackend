@@ -34,7 +34,7 @@ urlpatterns = [
     path('api/videostreamApp/', include('authemail.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
     path('verify/', EmailVerificationView.as_view(), name='email_verification'),
-    path('django_rq/', include('django_rq.urls')),
+    path('django_/', include('django_rq.urls')),
     path('import/',import_videos_view.as_view(), name='import_videos'),
     path('save/',export_videos_view, name='export_videos'),
     path('videos/<int:pk>/', VideoDetailView.as_view()),
