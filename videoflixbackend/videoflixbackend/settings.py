@@ -112,8 +112,8 @@ WSGI_APPLICATION = 'videoflixbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'videoflixbackend',
-        'USER': 'postgres',
+        'NAME': 'postgres',
+        'USER': 'super',
         'PASSWORD': 'postgres?!',
         'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
         'PORT': '13325',
