@@ -28,6 +28,7 @@ from django.http import HttpResponse
 from videostreamApp.admin import VideoResource
 from datetime import datetime
 from videostreamApp.models import export_videos,import_videos
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -125,6 +126,7 @@ class loginView(ObtainAuthToken):
 class VideoView(APIView):
       
      authentication_classes = [authentication.TokenAuthentication] 
+     permission_classes = [IsAuthenticated]
 
      CACHETTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
      """
@@ -181,6 +183,8 @@ class VideoTemplateView(TemplateView):
 class VideoDetailView(APIView):
 
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     """
     View for getting selected Video or delete it. Token required. 
     """
