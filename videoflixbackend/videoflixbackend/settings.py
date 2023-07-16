@@ -42,7 +42,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 
-ALLOWED_HOSTS = ['127.0.0.1','kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
+ALLOWED_HOSTS = ['127.0.0.1','35.234.123.111','kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
 
 
 # Application definition
@@ -109,27 +109,33 @@ WSGI_APPLICATION = 'videoflixbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
+    }
+}
 #DATABASES = {
  #   'default': {
   #      'ENGINE': 'django.db.backends.postgresql',
    #     'NAME': 'postgres',
     #    'USER': 'super',
      #   'PASSWORD': 'postgres?!',
-      #  'HOST': 'kbl98-3325.postgres.pythonanywhere-services.com',
+      #  'HOST': 'localhost',
        # 'PORT': '13325',
-    #}
+   # }
 #}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kbl',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql',
+   #     'NAME': 'postgres',
+    #    'USER': 'super',
+     #   'PASSWORD': '',
+      #  'HOST': 'localhost',
+       # 'PORT': '',
+   # }
+#}
 
 
 # Password validation
