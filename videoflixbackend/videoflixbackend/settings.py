@@ -42,7 +42,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 
 
-ALLOWED_HOSTS = ['127.0.0.1','35.234.123.111','kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
+ALLOWED_HOSTS = ['127.0.0.1','backend.kbl-developement.de','35.234.123.111','kbl98.pythonanywhere.com','localhost','kbl98-3325.postgres.pythonanywhere-services.com']
 
 
 # Application definition
