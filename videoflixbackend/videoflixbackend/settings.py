@@ -227,7 +227,7 @@ CACHES = {
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'localhost',
+        'HOST': '34.159.103.227',
         'PORT': 6379,
         'DB': 0,
         'PASSWORD':'foobared',
