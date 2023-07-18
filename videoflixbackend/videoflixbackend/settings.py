@@ -215,8 +215,8 @@ EMAIL_HOST_PASSWORD = 'hfzrquihywjwuzel'
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.Cache",
-        #"LOCATION": "redis://:foobared@127.0.0.1:6379/1",
-        "LOCATION": "redis://:redis@34.159.103.227:6379/1",
+        "LOCATION": "redis://:foobared@127.0.0.1:6379/1",
+        #"LOCATION": "redis://:foobared@34.159.103.227:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             'PASSWORD':'foobared',
@@ -227,7 +227,7 @@ CACHES = {
 
 RQ_QUEUES = {
     'default': {
-        'HOST': '34.159.103.227',
+        'HOST': 'localhost',
         'PORT': 6379,
         'DB': 0,
         'PASSWORD':'foobared',
