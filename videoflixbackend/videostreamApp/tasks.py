@@ -3,6 +3,10 @@ import subprocess
 from .models import Video
 
 def convert_480(source):
+
+    """
+    Converts resolution of loaded Video 
+    """
     print(source)
     source_name=os.path.splitext(source)[0]
     print(source_name)
@@ -17,6 +21,10 @@ def convert_480(source):
     os.remove(new_file)
 
 def convert_720(source):
+
+    """
+    Converts resolution of loaded Video 
+    """
     print(source)
     source_name=os.path.splitext(source)[0]
     print(source_name)
@@ -31,6 +39,9 @@ def convert_720(source):
     os.remove(new_file)
 
 def convert_1000(source):
+    """
+    Converts resolution of loaded Video 
+    """
     print(source)
     source_name=os.path.splitext(source)[0]
     print(source_name)

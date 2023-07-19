@@ -59,6 +59,9 @@ class VideoResource(resources.ModelResource):
     
 
 def export_videos():
+    """
+    function exports Videodata to backup-directory
+    """
     dataset = VideoResource().export()
     dataset_json = dataset.json
     print(dataset_json)
@@ -77,6 +80,9 @@ if __name__ == "__main__":
 
 
 def import_videos(backup):
+    """
+    function to reimport Videos from Backup
+    """
     video_resource = resources.modelresource_factory(model=Video)()
 
     with open(backup, 'r') as file:
