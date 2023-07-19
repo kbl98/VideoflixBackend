@@ -29,6 +29,7 @@ from videostreamApp.admin import VideoResource
 from datetime import datetime
 from videostreamApp.models import export_videos,import_videos
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import redirect
 
 
 # Create your views here.
@@ -99,7 +100,8 @@ class EmailVerificationView(APIView):
             user.is_verified = True
             user.save()
         
-            return JsonResponse({'Message': 'Email successfully verified'})
+            return redirect('https://kbl-developement.de/Videoflix/index.html')
+          #  return JsonResponse({'Message': 'Email successfully verified'})
         return JsonResponse({'Message': 'Code Missing'})
 
 class loginView(ObtainAuthToken):
@@ -148,7 +150,7 @@ class VideoView(APIView):
      
      def post(self,request):
          data=request.data
-         video=Video.objects.create(title=data['title'],description=data['description'],file=data['file'])
+         video=Video.objects.create(title=data.get('title'),description=data.get('description'),file=data.get('file'))
          video.save()
          serializedVideo=VideoSerializer(video)
 
