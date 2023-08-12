@@ -22,7 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 #from videostreamApp.views import export_video_json
 from videostreamApp.views import export_videos_view,import_videos_view
-from videostreamApp.views import VideoDetailView
+from videostreamApp.views import VideoDetailView,ResetPasswordView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
@@ -38,8 +38,7 @@ urlpatterns = [
     path('import/',import_videos_view.as_view(), name='import_videos'),
     path('save/',export_videos_view, name='export_videos'),
     path('videos/<int:pk>/', VideoDetailView.as_view()),
-
-    ##path('verify/<str:code>/', EmailVerificationView.as_view(), name='email_verification_with_code'),
+    path('reset/',ResetPasswordView.as_view()),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.BACKUP_URL, document_root=settings.BACKUP_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

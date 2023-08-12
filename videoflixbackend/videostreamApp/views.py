@@ -17,7 +17,7 @@ from django.urls  import reverse
 import smtplib
 import ssl
 from django.http import HttpResponse
-from .serializers import VideoSerializer
+from .serializers import VideoSerializer,MyUserSerializer
 from rest_framework import viewsets
 from django.views.decorators.cache import cache_page
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -125,6 +125,22 @@ class loginView(ObtainAuthToken):
         else:
             return Response({'message':'Not User'})  
         
+
+class ResetPasswordView(APIView):
+    def patch(self, request):
+        data=request.data
+        email=data.get('email')
+        try:
+            user = MyUser.objects.get(email=email)
+        except MyUser.DoesNotExist:
+            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = MyUserSerializer(user, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.update(user, data)
+            return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class VideoView(APIView):
       
      authentication_classes = [authentication.TokenAuthentication] 
@@ -135,12 +151,6 @@ class VideoView(APIView):
      View for get and post Videos. Only logged Users, Token required.
      """
      
-    # @cache_page(CACHETTL)
-    # def get(self,request, *args, **kwargs):
-       # videos=Video.objects.all()
-       #serializedVideos=VideoSerializer(videos,many=True)
-        #return render(request, 'videos.html', {'videos': videos})
-        
      @cache_page(CACHETTL)
      def get(self,request):
         videos=Video.objects.all()
@@ -159,8 +169,6 @@ class VideoView(APIView):
 
 
      def method(self, request, *args, **kwargs):
-        # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
-        # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
         pass
      
 
@@ -177,8 +185,6 @@ class VideoTemplateView(TemplateView):
      
      
      def method(self, request, *args, **kwargs):
-        # Hier können Sie die Logik für verschiedene HTTP-Methoden implementieren
-        # Wenn Sie nur GET unterstützen, können Sie diese Funktion leer lassen
         pass
      
 
@@ -219,10 +225,3 @@ class import_videos_view(APIView):
 
 
 
-#def export_video_json(request):
-  #  timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-   # video_resource = VideoResource()
-    #data = video_resource.export()
-    #response = HttpResponse(data.json, content_type='json')
-    #response['Content-Disposition'] = 'attachment; filename="backup"+{timestamp}+"books.json"'
-    #return response
