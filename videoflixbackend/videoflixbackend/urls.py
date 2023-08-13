@@ -38,7 +38,7 @@ urlpatterns = [
     path('import/',import_videos_view.as_view(), name='import_videos'),
     path('save/',export_videos_view, name='export_videos'),
     path('videos/<int:pk>/', VideoDetailView.as_view()),
-    path('reset/',ResetPasswordView.as_view()),
+    path('reset/',ResetPasswordView.as_view(),name='reset'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.BACKUP_URL, document_root=settings.BACKUP_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

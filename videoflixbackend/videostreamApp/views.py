@@ -135,7 +135,7 @@ class ResetPasswordView(APIView):
         try:
             user = MyUser.objects.filter(Q(id=id) & Q(password_reset_code=pw_code_from_url))
             if user.exists:
-                return redirect('https://kbl-developement.de/Videoflix/reset/')
+                return redirect('https://kbl-developement.de/Videoflix/reset/{pw_code_from_url}')
             else:
                 return redirect('https://kbl-developement.de/Videoflix/')
         except MyUser.DoesNotExist:
@@ -150,10 +150,10 @@ class ResetPasswordView(APIView):
             id=user.id
             user.password_reset_code=pw_code
             user.save()
-            reset_link = reverse('reset') + f'?code={pw_code},id={id}'
+            reset_link = reverse('reset') + f'?code={pw_code} & id={id}'
             reset_url = self.request.build_absolute_uri(reset_link)
         
-            self.send_password_reset_email(user,reset_url,reset_url)
+            self.send_password_reset_email(user,reset_url)
             return JsonResponse({'Message':' Mail sent'})
         except MyUser.DoesNotExist:
             return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
