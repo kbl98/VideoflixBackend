@@ -15,6 +15,7 @@ from .models import MyUser,Video
 import random
 from django.urls  import reverse
 import smtplib
+from django.db.models import Q
 import ssl
 from django.http import HttpResponse
 from .serializers import VideoSerializer,MyUserSerializer
@@ -65,9 +66,6 @@ class UserRegistrationView(APIView):
         return False 
     
     def generate_verification_code(self):
-        # Code to generate a verification code
-        # You can use any method you prefer to generate a unique verification code
-        # For simplicity, let's assume it's a random 6-digit code
         return str(random.randint(100000, 999999))
     
     
@@ -127,19 +125,69 @@ class loginView(ObtainAuthToken):
         
 
 class ResetPasswordView(APIView):
-    def patch(self, request):
+    def get(self,request):
+        
+        pw_code_from_url = request.query_params.get('code')
+        id=request.query_params.get('id')
+        if not pw_code_from_url:
+            return Response({"message": "No password reset code provided."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = MyUser.objects.filter(Q(id=id) & Q(password_reset_code=pw_code_from_url))
+            if user.exists:
+                return redirect('https://kbl-developement.de/Videoflix/reset/')
+            else:
+                return redirect('https://kbl-developement.de/Videoflix/')
+        except MyUser.DoesNotExist:
+            return Response({"message": "Invalid password reset code."}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self,request, *args, **kwargs):
         data=request.data
         email=data.get('email')
         try:
             user = MyUser.objects.get(email=email)
+            pw_code=self.generate_pw_reset_code()
+            id=user.id
+            user.password_reset_code=pw_code
+            user.save()
+            reset_link = reverse('reset') + f'?code={pw_code},id={id}'
+            reset_url = self.request.build_absolute_uri(reset_link)
+        
+            self.send_password_reset_email(user,reset_url,reset_url)
+            return JsonResponse({'Message':' Mail sent'})
+        except MyUser.DoesNotExist:
+            return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request):
+        data=request.data
+        email=data.get('email')
+        password_reset_code=data.get('resetCode')
+
+        try:
+            user = MyUser.objects.get(email=email,password_reset_code=password_reset_code)
         except MyUser.DoesNotExist:
             return Response({"message": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = MyUserSerializer(user, data=data, partial=True)
         if serializer.is_valid():
             serializer.update(user, data)
+            user.password_reset_code = None  # Setze password_reset_code auf None
+            user.save()
             return Response({"message": "Password updated successfully."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def send_password_reset_email(self, user,reset_url):
+
+        subject = 'Reset Verification'
+        message = f'Dear {user.email},\n\nPlease click the link below to verify your email address:\n\n{reset_url}'
+        from_email = 'devakad8@gmail.com'
+        to_email = user.email
+       
+        send_mail(subject, message, from_email, [to_email])
+
+    def generate_pw_reset_code(self):
+        return str(random.randint(100000, 999999))
         
 class VideoView(APIView):
       

@@ -21,6 +21,7 @@ class MyUser(EmailAbstractUser):
     objects = EmailUserManager()
     verification_code = models.CharField(max_length=6, blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    password_reset_code=models.CharField(max_length=6, blank=True, null=True)
    
     # We inherit the other fields and methods from the AbstractUser model
     
