@@ -125,6 +125,12 @@ class loginView(ObtainAuthToken):
         
 
 class ResetPasswordView(APIView):
+
+    """
+    Funtions to reset PW.With post an email adress is posted to server and a resetcode is created. 
+    This code is added to a verificationlink. 
+    Click on verification leads to get method, where the initiation of reset-window is done. With Patch User can change pw.
+    """
     def get(self,request):
         
         pw_code_from_url = request.query_params.get('code')
@@ -135,7 +141,7 @@ class ResetPasswordView(APIView):
         try:
             user = MyUser.objects.filter(Q(id=id) & Q(password_reset_code=pw_code_from_url))
             if user.exists:
-                return redirect('https://kbl-developement.de/Videoflix/reset/{pw_code_from_url}')
+                return redirect(f'https://kbl-developement.de/Videoflix/reset/{pw_code_from_url}')
             else:
                 return redirect('https://kbl-developement.de/Videoflix/')
         except MyUser.DoesNotExist:
